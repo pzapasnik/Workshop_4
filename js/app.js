@@ -17,7 +17,16 @@ $(document).ready(function(){
             detailDiv.text('Author: ' + bookDetails.author + ', id: ' + bookDetails.id + ', isbn: ' + bookDetails.isbn + ', publisher ' + bookDetails.publisher + ', type' + bookDetails.type);
         })
     })
-    // zad 5
+    rootDiv.on('click', '.delete-button', function(e){
+        e.stopPropagation();
+        var bookId = $(this).parent().data('id');
+        $.ajax({
+            url:'http://localhost:8282/books/' + bookId,
+            type: 'DELETE'
+        }).done(function(){
+            refreshBooks(rootDiv);
+        })
+    })
 
 });
 
@@ -57,7 +66,7 @@ function refreshBooks(rootElement) {
         type: 'GET'
     }).done(function(data){
         for (var i = 0; i < data.length; i++) {
-            var newTag = $('<div class="book" data-id="' + data[i].id +'">' + data[i].title + '<div style=display:none;></div></div>');
+            var newTag = $('<div class="book" data-id="' + data[i].id +'">' + data[i].title +'<button class="delete-button">Usun</button>' + '<div style=display:none;></div></div>');
             rootElement.append(newTag);
         }
     })
